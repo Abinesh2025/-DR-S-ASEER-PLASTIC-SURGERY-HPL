@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "581082696138",
+    "project_id": "dr-s-aseer",
+    "storage_bucket": "dr-s-aseer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581082696138:android:9c66d21b7c49ffaa83e733",
+        "android_client_info": {
+          "package_name": "com.doctorhealix.aseer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUs9KW0kHHI9r-PB6wx7m-PAiRAdZlZ3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
