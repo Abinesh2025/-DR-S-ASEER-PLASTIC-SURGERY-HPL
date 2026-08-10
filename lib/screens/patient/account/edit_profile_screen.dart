@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/component/common_snackbar.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/component/common_app_bar.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/component/common_button.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/component/common_phone_textfield.dart';
@@ -23,6 +25,25 @@ class EditProfileScreen extends StatelessWidget {
   final FocusNode addressFocus = FocusNode();
   final FocusNode cityFocus = FocusNode();
   final FocusNode pincodeFocus = FocusNode();
+
+  String _getFileName(String url, String fieldName, int fieldId) {
+    try {
+      final uri = Uri.parse(url);
+      if (uri.pathSegments.isNotEmpty) {
+        final last = uri.pathSegments.last;
+        if (last.isNotEmpty && last != fieldId.toString() && !RegExp(r'^\d+$').hasMatch(last)) {
+          return last;
+        }
+        if (uri.pathSegments.length > 1) {
+          final secondLast = uri.pathSegments[uri.pathSegments.length - 2];
+          if (secondLast.isNotEmpty && secondLast != fieldId.toString() && !RegExp(r'^\d+$').hasMatch(secondLast)) {
+            return secondLast;
+          }
+        }
+      }
+    } catch (_) {}
+    return "$fieldName (Uploaded)";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,6 +288,8 @@ class EditProfileScreen extends StatelessWidget {
                           const SizedBox(height: 12),
 
                           ...editProfileController.customFields.map((field) {
+                            if (field.id == null) return const SizedBox();
+
                             if (field.field_type_name == "toggle") {
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 10),
@@ -295,13 +318,168 @@ class EditProfileScreen extends StatelessWidget {
                                     Transform.scale(
                                       scale: 0.8,
                                       child: Switch(
-                                        value: editProfileController.customFieldValues[field.id] ?? false,
+                                        value: editProfileController.customFieldToggles[field.id] ?? false,
                                         activeColor: ColorConst.primaryColor,
                                         onChanged: (value) {
                                           editProfileController
-                                              .customFieldValues[field.id!] = value;
+                                              .customFieldToggles[field.id!] = value;
                                           editProfileController.update();
                                         },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else if (field.field_type_name == "text" || field.field_type_name == "number") {
+                              final textController = editProfileController.customFieldControllers[field.id];
+                              if (textController == null) return const SizedBox();
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (field.is_required == true)
+                                      CommonRequiredText(
+                                        width: width,
+                                        text: field.field_name ?? "",
+                                      )
+                                    else
+                                      Text(
+                                        field.field_name ?? "",
+                                        style: TextStyle(
+                                          fontSize: width * 0.038,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConst.blackColor,
+                                        ),
+                                      ),
+                                    const SizedBox(height: 8),
+                                    CommonTextField(
+                                      validator: (value) {
+                                        if (field.is_required == true && (value == null || value.trim().isEmpty)) {
+                                          return "Please enter ${field.field_name}";
+                                        }
+                                        return null;
+                                      },
+                                      controller: textController,
+                                      keyBoardType: field.field_type_name == "number" ? TextInputType.number : TextInputType.text,
+                                      hintText: "Enter ${field.field_name}",
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else if (field.field_type_name == "fileUpload") {
+                              final pickedFile = editProfileController.customFieldFiles[field.id];
+                              final existingUrl = editProfileController.customFieldFileUrls[field.id];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (field.is_required == true)
+                                      CommonRequiredText(
+                                        width: width,
+                                        text: field.field_name ?? "",
+                                      )
+                                    else
+                                      Text(
+                                        field.field_name ?? "",
+                                        style: TextStyle(
+                                          fontSize: width * 0.038,
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorConst.blackColor,
+                                        ),
+                                      ),
+                                    const SizedBox(height: 8),
+                                    InkWell(
+                                      onTap: () {
+                                        editProfileController.pickCustomFieldFile(field.id!);
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 14,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: ColorConst.borderGreyColor,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.upload_file,
+                                              color: ColorConst.primaryColor,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                pickedFile != null
+                                                    ? pickedFile.name
+                                                    : (existingUrl != null && existingUrl.isNotEmpty)
+                                                        ? _getFileName(existingUrl, field.field_name ?? "Document", field.id!)
+                                                        : "Choose File (Image/Document)",
+                                                style: TextStyle(
+                                                  color: (pickedFile != null || existingUrl != null)
+                                                      ? ColorConst.blackColor
+                                                      : ColorConst.hintGreyColor,
+                                                  fontSize: width * 0.038,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                            if (existingUrl != null && existingUrl.isNotEmpty && pickedFile == null) ...[
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  final uri = Uri.tryParse(existingUrl);
+                                                  if (uri != null) {
+                                                    if (await canLaunchUrl(uri)) {
+                                                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                                    } else {
+                                                      DisplaySnackBar.displaySnackBar(
+                                                          "Could not open document link", 3, ColorConst.redColor);
+                                                    }
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                                                  child: Icon(
+                                                    Icons.visibility,
+                                                    color: ColorConst.primaryColor,
+                                                    size: 22,
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  editProfileController.customFieldFileUrls[field.id!] = null;
+                                                  editProfileController.update();
+                                                },
+                                                child: const Padding(
+                                                  padding: EdgeInsets.symmetric(horizontal: 6.0),
+                                                  child: Icon(
+                                                    Icons.delete_outline,
+                                                    color: Colors.red,
+                                                    size: 22,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                            if (pickedFile != null)
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: const BoxConstraints(),
+                                                icon: const Icon(Icons.close, color: Colors.red, size: 20),
+                                                onPressed: () {
+                                                  editProfileController.customFieldFiles[field.id!] = null;
+                                                  editProfileController.update();
+                                                },
+                                              ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],

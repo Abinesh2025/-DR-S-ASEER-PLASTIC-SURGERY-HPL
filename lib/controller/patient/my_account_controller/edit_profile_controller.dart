@@ -36,8 +36,12 @@ class EditProfileController extends GetxController {
 
   List<PatientCustomField> customFields = [];
 
-  Map<int, bool> customFieldValues = <int, bool>{};
+  Map<int, bool> customFieldToggles = <int, bool>{};
+  Map<int, TextEditingController> customFieldControllers = <int, TextEditingController>{};
+  Map<int, XFile?> customFieldFiles = <int, XFile?>{};
+  Map<int, String?> customFieldFileUrls = <int, String?>{};
   String? imageUrl;
+
   @override
   void onInit() {
     super.onInit();
@@ -71,6 +75,15 @@ class EditProfileController extends GetxController {
     imageUrl = VariableUtils.imageUrl.value;
     getSettings();
   }
+
+  @override
+  void onClose() {
+    customFieldControllers.forEach((key, controller) {
+      controller.dispose();
+    });
+    super.onClose();
+  }
+
   Future<void> getSettings() async {
     try {
       final response = await StringUtils.client.getThemeSettings(
@@ -81,16 +94,26 @@ class EditProfileController extends GetxController {
 
       customFields = response.data?.patient_custom_fields ?? [];
 
-      // Reset with explicit typed map
-      customFieldValues = <int, bool>{};
+      // Reset and clear all maps
+      customFieldToggles.clear();
+      customFieldControllers.clear();
+      customFieldFiles.clear();
+      customFieldFileUrls.clear();
+
       for (var field in customFields) {
         if (field.id != null) {
-          customFieldValues[field.id!] = false; // default OFF
+          if (field.field_type_name == "toggle") {
+            customFieldToggles[field.id!] = false; // default OFF
+          } else if (field.field_type_name == "text" || field.field_type_name == "number") {
+            customFieldControllers[field.id!] = TextEditingController();
+          } else if (field.field_type_name == "fileUpload") {
+            customFieldFiles[field.id!] = null;
+            customFieldFileUrls[field.id!] = null;
+          }
         }
       }
 
-      // Fetch profile to pre-populate saved toggle values
-      // API returns custom_field: { "field65": 0 } — key = "field" + id, value = 0 or 1
+      // Fetch profile to pre-populate saved values
       try {
         final profileResponse = await StringUtils.client.getProfile(
           PreferenceUtils.getStringValue("token"),
@@ -101,12 +124,29 @@ class EditProfileController extends GetxController {
             // Key format: "field65" → extract numeric id "65"
             final idStr = key.replaceAll(RegExp(r'[^0-9]'), '');
             final fieldId = int.tryParse(idStr);
-            if (fieldId != null && customFieldValues.containsKey(fieldId)) {
-              // value 1 → true (ON), value 0 → false (OFF)
-              customFieldValues[fieldId] =
-                  value == 1 ||
-                      value == "1" ||
-                      value == true;
+            if (fieldId != null) {
+              // Find matching custom field to check type
+              PatientCustomField? matchedField;
+              for (final f in customFields) {
+                if (f.id == fieldId) {
+                  matchedField = f;
+                  break;
+                }
+              }
+              if (matchedField != null) {
+                if (matchedField.field_type_name == "toggle") {
+                  customFieldToggles[fieldId] =
+                      value == 1 || value == "1" || value == true;
+                } else if (matchedField.field_type_name == "text" || matchedField.field_type_name == "number") {
+                  if (customFieldControllers.containsKey(fieldId)) {
+                    customFieldControllers[fieldId]!.text = value?.toString() ?? "";
+                  }
+                } else if (matchedField.field_type_name == "fileUpload") {
+                  if (value != null && value.toString().isNotEmpty) {
+                    customFieldFileUrls[fieldId] = value.toString();
+                  }
+                }
+              }
             }
           });
         }
@@ -119,6 +159,7 @@ class EditProfileController extends GetxController {
       debugPrint(e.toString());
     }
   }
+
   void pickImage(BuildContext context) async {
     file = await imagePicker.pickImage(
       source: ImageSource.gallery,
@@ -131,6 +172,20 @@ class EditProfileController extends GetxController {
       update();
     }
   }
+
+  void pickCustomFieldFile(int fieldId) async {
+    final XFile? pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      maxWidth: 1024,
+      maxHeight: 1024,
+    );
+    if (pickedFile != null) {
+      customFieldFiles[fieldId] = pickedFile;
+      update();
+    }
+  }
+
   void updateProfile({VoidCallback? onSuccess}) {
     isLoading = true;
     update(); // 🔥 important
@@ -147,8 +202,7 @@ class EditProfileController extends GetxController {
       DisplaySnackBar.displaySnackBar(
           "Please enter last name", 3, ColorConst.redColor);
 
-    }
-    else if (emailController.text.trim().isEmpty) {
+    } else if (emailController.text.trim().isEmpty) {
       isLoading = false;
       update();
       DisplaySnackBar.displaySnackBar(
@@ -167,14 +221,44 @@ class EditProfileController extends GetxController {
           "Please enter phone no", 3, ColorConst.redColor);
 
     } else {
-      // Build custom fields payload: toggle ON → "Yes", toggle OFF → "No"
-      // Key = field id number (e.g., "1"), Value = "Yes" / "No"
+      // Validate custom fields
+      for (final field in customFields) {
+        if (field.id != null && field.is_required == true) {
+          if (field.field_type_name == "text" || field.field_type_name == "number") {
+            final val = customFieldControllers[field.id]?.text.trim() ?? "";
+            if (val.isEmpty) {
+              isLoading = false;
+              update();
+              DisplaySnackBar.displaySnackBar(
+                  "Please enter ${field.field_name}", 3, ColorConst.redColor);
+              return;
+            }
+          } else if (field.field_type_name == "fileUpload") {
+            final fileVal = customFieldFiles[field.id];
+            final urlVal = customFieldFileUrls[field.id];
+            if (fileVal == null && (urlVal == null || urlVal.isEmpty)) {
+              isLoading = false;
+              update();
+              DisplaySnackBar.displaySnackBar(
+                  "Please upload ${field.field_name}", 3, ColorConst.redColor);
+              return;
+            }
+          }
+        }
+      }
+
+      // Build custom fields payload
       final Map<String, dynamic> customFieldsPayload = {};
 
       for (final field in customFields) {
         if (field.id != null) {
-          customFieldsPayload["field${field.id}"] =
-          (customFieldValues[field.id] ?? false) ? "1" : "0";
+          if (field.field_type_name == "toggle") {
+            customFieldsPayload["field${field.id}"] =
+                (customFieldToggles[field.id] ?? false) ? "1" : "0";
+          } else if (field.field_type_name == "text" || field.field_type_name == "number") {
+            customFieldsPayload["field${field.id}"] =
+                customFieldControllers[field.id]?.text ?? "";
+          }
         }
       }
 
@@ -203,6 +287,28 @@ class EditProfileController extends GetxController {
           _data.fields.add(MapEntry(key, value.toString()));
         }
       });
+
+      // Add custom files or clear deleted ones
+      for (final field in customFields) {
+        if (field.id != null && field.field_type_name == "fileUpload") {
+          final xfile = customFieldFiles[field.id];
+          final existingUrl = customFieldFileUrls[field.id];
+          if (xfile != null) {
+            _data.files.add(
+              MapEntry(
+                'field${field.id}',
+                MultipartFile.fromFileSync(
+                  xfile.path,
+                  filename: xfile.name,
+                ),
+              ),
+            );
+          } else if (existingUrl == null) {
+            // User explicitly cleared the existing file and didn't select a new one
+            _data.fields.add(MapEntry('field${field.id}', ""));
+          }
+        }
+      }
 
       // 🔍 DEBUG: Print full payload before sending
       debugPrint('===== editProfile Payload =====');
