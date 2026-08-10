@@ -52,13 +52,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="dev.doctorhealix.com"
+                    android:host="app.doctorhealix.com"
                     android:pathPrefix="/f9f46152-3d87-4ec0-a000-ba3b333243a3"/>
 
                 <!-- HTTP (optional) -->
                 <data
                     android:scheme="http"
-                    android:host="dev.doctorhealix.com"
+                    android:host="app.doctorhealix.com"
                     android:pathPrefix="/f9f46152-3d87-4ec0-a000-ba3b333243a3"/>
             </intent-filter>
         </activity>
