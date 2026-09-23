@@ -12,7 +12,7 @@ part of 'api_request.dart';
 
 class _ApiClient implements ApiClient {
   _ApiClient(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://app.doctorhealix.com/api/';
+    baseUrl ??= 'https://dev.doctorhealix.com/api/';
   }
 
   final Dio _dio;

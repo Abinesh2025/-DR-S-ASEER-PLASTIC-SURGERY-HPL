@@ -8,12 +8,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback leadOnTap;
   final Icon leadIcon;
   final bool isGradient;
+  final List<Widget>? actions;
   const CommonAppBar({
     Key? key,
     required this.title,
     required this.leadOnTap,
     required this.leadIcon,
     this.isGradient = false,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -81,6 +83,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           shadowColor: Colors.transparent,
           centerTitle: true,
           toolbarHeight: kToolbarHeight + 15,
+          actions: actions,
           title: Text(
             title,
             style: TextStyleConst.boldTextStyle(

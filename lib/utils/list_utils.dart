@@ -51,6 +51,10 @@ class ListUtils {
       "icon": ImageUtils.newsletterIcon,
       "title": StringUtils.newsletters,
     },
+    {
+      "icon": ImageUtils.doctorsIcon,
+      "title": StringUtils.visitingConsultantsTitle,
+    },
   ];
 
   static List<Map<String, dynamic>> get doctorDrawerList => [

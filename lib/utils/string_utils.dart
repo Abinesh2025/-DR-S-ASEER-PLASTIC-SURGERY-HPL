@@ -61,6 +61,9 @@ class StringUtils {
   static const doctorSessionStart = "doctor-session/start";
   static const doctorSessionPause = "doctor-session/pause";
   static const doctorSessionStop = "doctor-session/stop";
+  static const visitingConsultants = "visiting-consultants";
+  static const visitingConsultantRequests = "visiting-consultant-requests";
+  static const visitingConsultantsTitle = "Visiting Specialists";
 
 
   static String fixImageUrl(String? url) {

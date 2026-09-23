@@ -27,6 +27,7 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/pa
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/constant/skeleton_loading_widgets.dart';
 
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/chatbot/chatbot_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/visiting_consultant/visiting_consultant_directory_screen.dart';
 import 'package:lottie/lottie.dart';
 
 class PatientHomePage extends StatefulWidget {
@@ -309,10 +310,101 @@ UpcomingAppointmentsWidget(controller: controller),
                           const SizedBox(height: 15),
                           // Categories (Find your doctor)
                           const CategoryWidget(),
+                          const SizedBox(height: 12),
 
-
-
-
+                          // Visiting Specialists on Demand Banner
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(() => const VisitingConsultantDirectoryScreen());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      ColorConst.primaryColor,
+                                      const Color(0xff097A4D),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(18),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: ColorConst.primaryColor.withOpacity(0.22),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.18),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                      child: const Icon(
+                                        Icons.medical_services_rounded,
+                                        color: Colors.white,
+                                        size: 26,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Visiting Specialists",
+                                                style: TextStyleConst.boldTextStyle(
+                                                  Colors.white,
+                                                  15,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white.withOpacity(0.25),
+                                                  borderRadius: BorderRadius.circular(6),
+                                                ),
+                                                child: Text(
+                                                  "OPD & IPD",
+                                                  style: TextStyleConst.boldTextStyle(
+                                                    Colors.white,
+                                                    9,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            "Book consultations with external super-specialists",
+                                            style: TextStyleConst.regularTextStyle(
+                                              Colors.white.withOpacity(0.9),
+                                              12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      color: Colors.white,
+                                      size: 14,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 10),
 
                           // Popular Doctors Header
