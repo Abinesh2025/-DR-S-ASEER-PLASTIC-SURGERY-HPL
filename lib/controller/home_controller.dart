@@ -28,11 +28,11 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/do
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/admission/admissions_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/account/my_account_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/appointment/appointment_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/visiting_consultant/visiting_consultant_directory_screen.dart';
 
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/auth/login_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/bills/bills_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/case/case_screen.dart';
-import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/consultancy/live_consultations_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/diagnosis/diagnosis_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/document/document_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/invoice/invoice_screen.dart';
@@ -64,7 +64,6 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/document_controller/document_list_controller.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/invoice_controller/invoice_list_controller.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/order_controller/order_list_controller.dart';
-import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/live_consultancy_controller/live_consultations_controller.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/case_controller/case_controller.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/admission_controller/admission_controller.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/patient/prescription_controller/prescription_controller.dart';
@@ -596,6 +595,11 @@ class HomeController extends GetxController {
         currentDrawerIndex.value = 10;
         final newslettersController = Get.put(NewslettersController());
         newslettersController.fetchCategories();
+        break;
+      case 11:
+        currentWidget = const VisitingConsultantDirectoryScreen();
+        appBarTitle.value = StringUtils.visitingConsultantsTitle;
+        currentDrawerIndex.value = 11;
         break;
     }
     router.go('/home');

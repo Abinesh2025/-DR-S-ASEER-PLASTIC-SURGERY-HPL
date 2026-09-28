@@ -19,10 +19,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/home_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/auth/login_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/home/doctor_details_screen.dart';
-import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/appointment/new_appointment_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/utils/config_utils.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/model/patient/newsletters_model/newsletters_model.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/newsletters/newsletter_details_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/visiting_consultant/create_visiting_request_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/visiting_consultant/visiting_consultant_directory_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/visiting_consultant/visiting_request_detail_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/visiting_consultant/visiting_requests_list_screen.dart';
 
 
 import 'l10n/app_localizations.dart';
@@ -191,6 +194,30 @@ final router = GoRouter(
         return NewsletterDetailsScreen(
           article: Newsletter(slug: slug),
         );
+      },
+    ),
+    GoRoute(
+      path: '/visiting-consultants',
+      builder: (_, __) => const VisitingConsultantDirectoryScreen(),
+    ),
+    GoRoute(
+      path: '/visiting-requests',
+      builder: (_, __) => const VisitingRequestsListScreen(),
+    ),
+    GoRoute(
+      path: '/create-visiting-request',
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>?;
+        return CreateVisitingRequestScreen(
+          initialConsultant: extras?['consultant'],
+        );
+      },
+    ),
+    GoRoute(
+      path: '/visiting-request-detail/:id',
+      builder: (context, state) {
+        final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+        return VisitingRequestDetailScreen(requestId: id);
       },
     ),
   ],
