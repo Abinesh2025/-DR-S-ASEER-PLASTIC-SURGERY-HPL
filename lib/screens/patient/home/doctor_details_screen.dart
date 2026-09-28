@@ -11,6 +11,7 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/pa
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/utils/image_utils.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/constant/skeleton_loading_widgets.dart';
 
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/component/common_snackbar.dart';
 import '../../../utils/string_utils.dart';
 
 class DoctorDetailsScreen extends StatefulWidget {
@@ -301,89 +302,104 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                                   }),
 
 
-                                  const SizedBox(height: 20),
-                                  // Appointment Type
-                                  _buildSectionTitle("Appointment Type"),
-                                  const SizedBox(height: 10),
-                                  _buildAppointmentTypeFilter(controller),
-                                  
-                                  const SizedBox(height: 20),
+                                   const SizedBox(height: 14),
+                                   // Appointment Type
+                                   _buildSectionTitle("Appointment Type"),
+                                   const SizedBox(height: 10),
+                                   _buildAppointmentTypeFilter(controller),
+
+                                   const SizedBox(height: 12),
+                                   // Queue Policy in full line next to/below NEW OPD and NEW FOLLOW UP
+                                   Container(
+                                     width: double.infinity,
+                                     padding: const EdgeInsets.symmetric(
+                                         horizontal: 10, vertical: 8),
+                                     decoration: BoxDecoration(
+                                       color: const Color(0xffFFF8EE),
+                                       borderRadius: BorderRadius.circular(8),
+                                       border: Border.all(
+                                           color: const Color(0xffFDE3BA)),
+                                     ),
+                                     child: Row(
+                                       crossAxisAlignment:
+                                           CrossAxisAlignment.center,
+                                       children: [
+                                         const Icon(
+                                           Icons.info_outline,
+                                           size: 16,
+                                           color: Color(0xffD97706),
+                                         ),
+                                         const SizedBox(width: 8),
+                                         Expanded(
+                                           child: RichText(
+                                             text: TextSpan(
+                                               style: TextStyleConst
+                                                   .regularTextStyle(
+                                                 const Color(0xff92400E),
+                                                 11,
+                                               ),
+                                               children: [
+                                                 TextSpan(
+                                                   text: "Queue Policy: ",
+                                                   style: TextStyleConst
+                                                       .boldTextStyle(
+                                                     const Color(0xffB45309),
+                                                     11,
+                                                   ),
+                                                 ),
+                                                 const TextSpan(
+                                                   text:
+                                                       "If your token is called and you are not present, priority passes to patients currently waiting.",
+                                                 ),
+                                               ],
+                                             ),
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+                                   
+                                   const SizedBox(height: 20),
                                   // Schedules
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      _buildSectionTitle("Schedules"),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "${_getMonthName(controller.focusedDate.month)} ${controller.focusedDate.year}",
-                                            style:
-                                                TextStyleConst.mediumTextStyle(
-                                                    Colors.black54, 14),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          GestureDetector(
-                                            onTap: (controller
-                                                            .focusedDate.year >
-                                                        DateTime.now().year ||
-                                                    controller
-                                                            .focusedDate.month >
-                                                        DateTime.now().month)
-                                                ? controller.prevMonth
-                                                : null,
-                                            child: Container(
-                                              padding: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color:
-                                                        Colors.grey.shade300),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Icon(
-                                                Icons.chevron_left,
-                                                size: 20,
-                                                color: (controller.focusedDate
-                                                                .year >
-                                                            DateTime.now()
-                                                                .year ||
-                                                        controller.focusedDate
-                                                                .month >
-                                                            DateTime.now()
-                                                                .month)
-                                                    ? Colors.black
-                                                    : Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: controller.nextMonth,
-                                            child: Container(
-                                              padding: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color:
-                                                        Colors.grey.shade300),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: const Icon(
-                                                Icons.chevron_right,
-                                                size: 20,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  _buildCalendar(controller),
+                                   Row(
+                                     mainAxisAlignment:
+                                         MainAxisAlignment.spaceBetween,
+                                     children: [
+                                       _buildSectionTitle("Schedules"),
+                                       Container(
+                                         padding: const EdgeInsets.symmetric(
+                                             horizontal: 10, vertical: 4),
+                                         decoration: BoxDecoration(
+                                           color: ColorConst.primaryColor
+                                               .withOpacity(0.08),
+                                           borderRadius:
+                                               BorderRadius.circular(20),
+                                           border: Border.all(
+                                             color: ColorConst.primaryColor
+                                                 .withOpacity(0.25),
+                                           ),
+                                         ),
+                                         child: Row(
+                                           mainAxisSize: MainAxisSize.min,
+                                           children: [
+                                              Icon(Icons.bolt,
+                                                  size: 14,
+                                                  color: ColorConst.primaryColor),
+                                             const SizedBox(width: 4),
+                                             Text(
+                                               "Today Only",
+                                               style: TextStyleConst
+                                                   .boldTextStyle(
+                                                       ColorConst.primaryColor,
+                                                       12),
+                                             ),
+                                           ],
+                                         ),
+                                       ),
+                                     ],
+                                   ),
+                                   const SizedBox(height: 10),
+                                   _buildCalendar(controller),
 
                                   const SizedBox(height: 25),
                                   // Slots Selection
@@ -630,16 +646,10 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          SizedBox(
-            width: 100,
-            child: _buildApptTypeOption(controller, "OPD", 1),
-          ),
+          _buildApptTypeOption(controller, "NEW OPD", 1),
           const SizedBox(width: 10),
 
-          SizedBox(
-            width: 100,
-            child: _buildApptTypeOption(controller, "FOLLOW UP", 2,),
-          ),
+          _buildApptTypeOption(controller, "NEW FOLLOW UP", 2),
 
           // Show only when special tokens exist
           if (specialTokens.isNotEmpty)
@@ -649,14 +659,11 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
 
                 return Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: SizedBox(
-                    width: 100,
-                    child: _buildApptTypeOption(
-                      controller,
-                      entry.value.tokenType ?? "",
-                      uiValue,
-                      specialTokenType: entry.value.tokenType,
-                    ),
+                  child: _buildApptTypeOption(
+                    controller,
+                    entry.value.tokenType ?? "",
+                    uiValue,
+                    specialTokenType: entry.value.tokenType,
                   ),
                 );
               },
@@ -683,6 +690,8 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       },
       child: Container(
         height: 35,
+        constraints: const BoxConstraints(minWidth: 90),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected ? ColorConst.primaryColor : Colors.white,
@@ -760,119 +769,59 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               style: TextStyleConst.mediumTextStyle(Colors.grey, 14)));
     }
 
-    // Extract unique categories
-    Set<String> categories = {};
-    for (var slot in allSlots) {
-      String? cat;
-      if (slot is BookingToken) {
-        cat = slot.category;
-      } else if (slot is Map) {
-        cat = slot['category']?.toString();
-      }
-      if (cat != null && cat.isNotEmpty) {
-        categories.add(cat.toLowerCase());
-      }
-    }
-
-    // Filter slots by selected category while preserving original indices
-    final filteredSlotsWithIndices = <Map<String, dynamic>>[];
+    // Map all slots preserving original indices
+    final allSlotsWithIndices = <Map<String, dynamic>>[];
     for (int i = 0; i < allSlots.length; i++) {
-      final slot = allSlots[i];
-      String? cat;
-      if (slot is BookingToken) {
-        cat = slot.category;
-      } else if (slot is Map) {
-        cat = slot['category']?.toString();
-      }
-
-      bool shouldAdd = false;
-      if (categories.isEmpty) {
-        shouldAdd = true;
-      } else {
-        if (cat != null && cat.toLowerCase() == controller.selectedCategory.toLowerCase()) {
-          shouldAdd = true;
-        }
-      }
-
-      if (shouldAdd) {
-        filteredSlotsWithIndices.add({
-          'slot': slot,
-          'index': i,
-        });
-      }
+      allSlotsWithIndices.add({
+        'slot': allSlots[i],
+        'index': i,
+      });
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (categories.isNotEmpty && !categories.contains("overall")) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFFE9F1F0),
-              borderRadius: BorderRadius.circular(30),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1E88E5), Color(0xFF1565C0)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF1565C0).withOpacity(0.28),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                if (categories.contains("morning"))
-                  Expanded(
-                      child: _buildCategoryTab(controller, "Morning", "morning")),
-                if (categories.contains("afternoon"))
-                  Expanded(
-                      child:
-                          _buildCategoryTab(controller, "Afternoon", "afternoon")),
-                if (categories.contains("night") ||
-                    categories.contains("evening"))
-                  Expanded(
-                    child: _buildCategoryTab(
-                        controller,
-                        "Evening",
-                        categories.contains("night") ? "night" : "evening"),
-                  ),
+                const Icon(
+                  Icons.event_available_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "Available Session",
+                  style: TextStyleConst.boldTextStyle(Colors.white, 15),
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          Text("${controller.selectedCategory.capitalizeFirst} Schedule",
-              style: TextStyleConst.boldTextStyle(Colors.black87, 18)),
-          const SizedBox(height: 15),
-        ] else ...[
-          Text(controller.isTokenBased ? "Available Tokens" : "Available Time",
-              style: TextStyleConst.boldTextStyle(Colors.black87, 20)),
-          const SizedBox(height: 15),
-        ],
+        ),
+        const SizedBox(height: 18),
         if (controller.isTokenBased)
-          _buildTokenGrid(controller, filteredSlotsWithIndices)
+          _buildTokenGrid(controller, allSlotsWithIndices)
         else
-          _buildTimeGrid(controller, filteredSlotsWithIndices),
+          _buildTimeGrid(controller, allSlotsWithIndices),
       ],
-    );
-  }
-
-  Widget _buildCategoryTab(
-      DoctorDetailsController controller, String label, String category) {
-    final isSelected =
-        controller.selectedCategory.toLowerCase() == category.toLowerCase();
-    return GestureDetector(
-      onTap: () => controller.setCategory(category),
-      child: Container(
-
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? ColorConst.primaryColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyleConst.mediumTextStyle(
-              isSelected ? Colors.white : ColorConst.primaryColor,
-              14,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -1055,76 +1004,89 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
   }
 
   Widget _buildCalendar(DoctorDetailsController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-        // Date Strip
-        SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.visibleDates.length,
-            itemBuilder: (context, index) {
-              final date = controller.visibleDates[index];
-              final isSelected = controller.selectedDate ==
-                  "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final monthName = _getMonthName(today.month);
+    final weekDayName = _getWeekDayName(today.weekday);
 
-              return GestureDetector(
-                onTap: () => controller.onDateSelected(date, widget.doctorId),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Column(
-                    children: [
-                      // Date Number Card
-                      Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? ColorConst.primaryColor
-                              : const Color(0xffF1F4F6),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: isSelected
-                              ? [
-                                  BoxShadow(
-                                    color: ColorConst.primaryColor
-                                        .withOpacity(0.2),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ]
-                              : null,
-                        ),
-                        child: Center(
-                          child: Text(
-                            date.day.toString(),
-                            style: TextStyleConst.boldTextStyle(
-                              isSelected
-                                  ? Colors.white
-                                  : ColorConst.primaryColor,
-                              22,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Weekday Name
-                      Text(
-                        _getWeekDayName(date.weekday),
-                        style: TextStyleConst.mediumTextStyle(
-                          Colors.grey.shade500,
-                          14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+    return GestureDetector(
+      onTap: () {
+        controller.onDateSelected(today, widget.doctorId);
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: ColorConst.primaryColor.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: ColorConst.primaryColor.withOpacity(0.2),
           ),
         ),
-      ],
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: ColorConst.primaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorConst.primaryColor.withOpacity(0.25),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "TODAY",
+                    style: TextStyleConst.boldTextStyle(Colors.white, 10),
+                  ),
+                  Text(
+                    today.day.toString(),
+                    style: TextStyleConst.boldTextStyle(Colors.white, 20),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today,
+                    size: 16,
+                    color: ColorConst.primaryColor,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "$weekDayName, ${today.day} $monthName ${today.year}",
+                    style: TextStyleConst.boldTextStyle(
+                      Colors.black87,
+                      15,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: ColorConst.primaryColor.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.check,
+                size: 16,
+                color: ColorConst.primaryColor,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

@@ -479,6 +479,17 @@ class DoctorDetailsController extends GetxController {
       DisplaySnackBar.displaySnackBar("Please select a date", 3, ColorConst.redColor);
       return;
     }
+
+    // Same-day appointment restriction
+    final todayStr = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    if (selectedDate != todayStr) {
+      DisplaySnackBar.displaySnackBar(
+        "Appointments can only be booked for today.",
+        3,
+        ColorConst.redColor,
+      );
+      return;
+    }
     if (selectedTime == null) {
       DisplaySnackBar.displaySnackBar("Please select a time slot", 3, ColorConst.redColor);
       return;
