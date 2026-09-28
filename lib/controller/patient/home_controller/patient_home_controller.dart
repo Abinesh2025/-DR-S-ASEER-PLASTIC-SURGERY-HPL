@@ -596,10 +596,11 @@ class PatientHomeController extends GetxController {
     isAllDoctorsLoading.value = true;
     StringUtils.client
         .searchDoctors(PreferenceUtils.getStringValue("token"),
-            ConfigUtils.hospitalSku, null, null, null, null, null, null)
+            ConfigUtils.hospitalSku, null, null, null, null, null, "%")
         .then((value) {
       if (value.success == true && value.data != null) {
         allDoctors.value = value.data!;
+        debugPrint("=== TOTAL DOCTORS LOADED: ${allDoctors.length} ===");
       }
       isAllDoctorsLoading.value = false;
     }).catchError((error) {
