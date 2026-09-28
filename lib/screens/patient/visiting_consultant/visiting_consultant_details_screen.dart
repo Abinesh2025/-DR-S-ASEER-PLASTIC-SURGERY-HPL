@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/component/common_app_bar.dart';
@@ -15,6 +16,22 @@ class VisitingConsultantDetailsScreen extends StatelessWidget {
     super.key,
     required this.consultant,
   });
+
+  Widget _buildPlaceholder() {
+    return Container(
+      width: 100,
+      height: 100,
+      color: ColorConst.primaryColor.withOpacity(0.08),
+      alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Image.asset(
+          ImageUtils.doctorIcon,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +68,15 @@ class VisitingConsultantDetailsScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(22),
                       child: avatarUrl.isNotEmpty
-                          ? Image.network(
-                              avatarUrl,
+                          ? CachedNetworkImage(
+                              imageUrl: avatarUrl,
+                              width: 100,
+                              height: 100,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Image.asset(
-                                ImageUtils.doctorIcon,
-                                fit: BoxFit.cover,
-                              ),
+                              placeholder: (context, url) => _buildPlaceholder(),
+                              errorWidget: (context, url, error) => _buildPlaceholder(),
                             )
-                          : Image.asset(
-                              ImageUtils.doctorIcon,
-                              fit: BoxFit.cover,
-                            ),
+                          : _buildPlaceholder(),
                     ),
                   ),
                   const SizedBox(height: 14),

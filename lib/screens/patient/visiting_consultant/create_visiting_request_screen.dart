@@ -249,6 +249,11 @@ class _CreateVisitingRequestScreenState extends State<CreateVisitingRequestScree
 
             // 5. Preferred Time Slot
             _buildSectionTitle("5. Preferred Time Slot", required: false),
+            const SizedBox(height: 4),
+            Text(
+              "Select your preferred timing. (Please arrive at least 1 hour earlier)",
+              style: TextStyleConst.regularTextStyle(ColorConst.hintGreyColor, 12),
+            ),
             const SizedBox(height: 10),
             Obx(() {
               final consultant = requestController.selectedConsultant.value;
@@ -431,6 +436,60 @@ class _CreateVisitingRequestScreenState extends State<CreateVisitingRequestScree
                 ],
               );
             }),
+            const SizedBox(height: 18),
+
+            // Arrival Advisory Notice / Warning Banner
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBEB),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFFFCD34D),
+                  width: 1.2,
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B).withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.warning_amber_rounded,
+                      color: Color(0xFFD97706),
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Important: Arrive 1 Hour Earlier",
+                          style: TextStyleConst.boldTextStyle(
+                            const Color(0xFFB45309),
+                            13.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Please arrive at the hospital at least 1 hour before your scheduled appointment time for registration, preliminary checkup, and vitals recording.",
+                          style: TextStyleConst.regularTextStyle(
+                            const Color(0xFF92400E),
+                            12.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 24),
 
             // 6. Reason for Visit / Medical Notes

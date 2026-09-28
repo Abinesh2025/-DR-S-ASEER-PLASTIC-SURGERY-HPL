@@ -221,6 +221,37 @@ class _VisitingRequestDetailScreenState extends State<VisitingRequestDetailScree
                         _buildDetailRow("Reason", item.reason!),
                       if (item.cancellationReason != null && item.cancellationReason!.isNotEmpty)
                         _buildDetailRow("Cancellation Reason", item.cancellationReason!, isAlert: true),
+
+                      // Advisory Note
+                      Container(
+                        margin: const EdgeInsets.only(top: 12),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBEB),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFFCD34D), width: 1),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.warning_amber_rounded,
+                              color: Color(0xFFD97706),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                "Please arrive at the hospital at least 1 hour earlier than your consultation time for vitals check and preliminary registration.",
+                                style: TextStyleConst.mediumTextStyle(
+                                  const Color(0xFF92400E),
+                                  12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
