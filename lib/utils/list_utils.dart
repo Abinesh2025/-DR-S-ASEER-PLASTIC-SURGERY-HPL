@@ -98,10 +98,10 @@ class ListUtils {
       "icon": ImageUtils.noticeIcon,
       "title": StringUtils.noticeBoards,
     },
-    // {
-    //   "icon": ImageUtils.liveConsIcon,
-    //   "title": StringUtils.liveConsultations,
-    // },
+    {
+      "icon": ImageUtils.liveConsIcon,
+      "title": "AI Consultation",
+    },
     {
       "icon": ImageUtils.myPayrollIcon,
       "title": StringUtils.myPayRoll,
