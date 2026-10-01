@@ -4,6 +4,7 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/constant/t
 
 import '../../../../component/common_shimmer.dart';
 import '../../../../model/doctor/dashboard/doctor_dashboard_model.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/ai_consultation/ai_consultation_setup_dialog.dart';
 
 
 class ScheduleItemWidget extends StatelessWidget {
@@ -104,6 +105,29 @@ class ScheduleItemWidget extends StatelessWidget {
             child: Text(
               data?.status ?? "",
               style: TextStyleConst.boldTextStyle(statusColor, 10),
+            ),
+          ),
+          const SizedBox(width: 8),
+          InkWell(
+            onTap: () {
+              AiConsultationSetupDialog.show(
+                context,
+                appointmentId: data?.id,
+                patientName: data?.patientName,
+              );
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: ColorConst.primaryColor.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.auto_awesome,
+                size: 16,
+                color: ColorConst.primaryColor,
+              ),
             ),
           ),
         ],

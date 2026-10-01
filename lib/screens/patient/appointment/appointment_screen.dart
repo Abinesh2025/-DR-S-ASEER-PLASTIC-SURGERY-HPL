@@ -14,6 +14,7 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/utils/pref
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/controller/doctor/doctor_session_controller.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/constant/skeleton_loading_widgets.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/widgets/doctor_session_widget.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/ai_consultation/ai_consultation_setup_dialog.dart';
 
 class AppointmentScreen extends StatefulWidget {
   const AppointmentScreen({Key? key}) : super(key: key);
@@ -427,6 +428,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           time: tokenNum.isNotEmpty ? "Token $tokenNum" : timeStr,
           department: isDoctor ? "" : (appointment.doctor_department ?? ""),
           statusLabel: statusLabel,
+          patientId: isDoctor ? appointment.patient_id : null,
+          appointmentId: appointment.id,
         );
       },
     );
@@ -952,6 +955,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     required String time,
     required String department,
     required String statusLabel,
+    int? patientId,
+    int? appointmentId,
     VoidCallback? onCancel,
     VoidCallback? onDelete,
   }) {
@@ -1021,6 +1026,49 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   _buildDetailRow(Icons.access_time_rounded, "Time", time),
                   const SizedBox(height: 12),
                   _buildDetailRow(Icons.info_outline, "Status", statusLabel),
+                  if (PreferenceUtils.getStringValue("role") == "Doctor") ...[
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF0FA66A), Color(0xFF086C45)],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0FA66A).withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Get.back();
+                            AiConsultationSetupDialog.show(
+                              context,
+                              patientId: patientId,
+                              patientName: name,
+                              appointmentId: appointmentId,
+                            );
+                          },
+                          icon: const Icon(Icons.auto_awesome, color: Colors.white, size: 18),
+                          label: Text(
+                            "Start AI Consultation",
+                            style: TextStyleConst.boldTextStyle(Colors.white, 15),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   if (onCancel != null || onDelete != null) ...[
                     const SizedBox(height: 24),
                     const Divider(),

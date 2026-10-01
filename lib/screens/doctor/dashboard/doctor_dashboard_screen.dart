@@ -12,6 +12,7 @@ import '../../../controller/doctor/doctor_dashboard/doctor_dashboard_controller.
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/dashboard/widgets/schedule_item_widget.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/dashboard/widgets/summary_card_widget.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/dashboard/widgets/recent_patient_item_widget.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/ai_consultation/widgets/ai_consultation_dashboard_card.dart';
 
 class DoctorDashboardScreen extends StatelessWidget {
   const DoctorDashboardScreen({super.key});
@@ -53,7 +54,10 @@ class DoctorDashboardScreen extends StatelessWidget {
                     "How is your day going?",
                     style: TextStyleConst.regularTextStyle(ColorConst.hintGreyColor, 16),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
+
+                  // --- Aura AI Transcriber Card ---
+                  const AiConsultationDashboardCard(),
 
                   // --- Summary Cards ---
                   Row(

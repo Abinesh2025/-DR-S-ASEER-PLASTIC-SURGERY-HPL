@@ -48,6 +48,7 @@ import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/super_admi
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/home/patient_home_page.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/medicine/medicines_screen.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/patient/order/my_orders_screen.dart';
+import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/screens/doctor/ai_consultation/ai_consultation_launcher_screen.dart';
 
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/utils/image_utils.dart';
 import 'package:dr_s_aseer_plastic_surgery_and_accident_care_hospital/utils/variable_utils.dart';
@@ -753,34 +754,31 @@ class HomeController extends GetxController {
           Get.find<NoticeBoardController>().getNotice();
         }
         break;
-    // case 10:
-    //   currentWidget = LiveConsultationsScreen();
-    //   appBarTitle.value = StringUtils.liveConsultations;
-    //   currentDrawerIndex.value = 10;
-    //   if (Get.isRegistered<LiveConsultationsController>()) {
-    //     Get.find<LiveConsultationsController>().getDoctorConsultancy("all");
-    //   }
-    //   break;
       case 10:
+        currentWidget = const AiConsultationLauncherScreen();
+        appBarTitle.value = "AI Consultation";
+        currentDrawerIndex.value = 10;
+        break;
+      case 11:
         currentWidget = MyPayrollsScreen();
         appBarTitle.value = StringUtils.myPayrolls;
-        currentDrawerIndex.value = 10;
+        currentDrawerIndex.value = 11;
         if (Get.isRegistered<PayrollController>()) {
           Get.find<PayrollController>().getPayroll();
         }
         break;
-      case 11:
+      case 12:
         currentWidget = PatientAdmission();
         appBarTitle.value = StringUtils.patientAdmissions;
-        currentDrawerIndex.value = 11;
+        currentDrawerIndex.value = 12;
         if (Get.isRegistered<PatientAdmissionController>()) {
           Get.find<PatientAdmissionController>().getPatientAdmission();
         }
         break;
-      case 12:
+      case 13:
         currentWidget = const SelectReportScreen();
         appBarTitle.value = StringUtils.report;
-        currentDrawerIndex.value = 12;
+        currentDrawerIndex.value = 13;
         break;
     }
     router.go('/home');
